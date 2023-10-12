@@ -2,7 +2,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'MARKET CUB - Shopping and Sale',
-    author: 'Nugrawan pratama', 
+    author: 'Nugrawan pratama',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -21,16 +21,20 @@ export default {
 
   router: {
     extendRoutes(routes) {
-      routes.push({
-        name: 'detail',
-        path: '/products/:id',
-        component: 'pages/products/_id.vue',
-      })
-      routes.push({
-        name: 'detail',
-        path: '/articles/:title',
-        component: 'pages/articles/_title.vue',
-      })
+      routes.push(
+        {
+          name: 'products',
+          path: '/products/:id',
+          component: 'pages/products/_id.vue', // Mengarahkan ke _id.vue untuk :id
+        }
+      )
+      routes.push(
+        {
+          name: 'myproducts',
+          path: '/products/me/:myid',
+          component: 'pages/products/_myid.vue', // Mengarahkan ke _id.vue untuk :id
+        }
+      );
     },
   },
 
@@ -43,22 +47,36 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/localforage',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
   ],
 
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'https://berita-indo-api.vercel.app',
+    baseURL: '',
   },
 
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'http://127.0.0.1:3333/api/login', method: 'post', propertyName: 'data.token' },
+          user: { url: 'http://127.0.0.1:3333/api/me', method: 'get', propertyName: 'data' },
+          logout: false
+        }
+      }
+    },
+  },
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
@@ -67,7 +85,8 @@ export default {
   },
 
   env: {
-    baseURL: process.env.BASE_URL
+    supabaseApi: process.env.SUPABASE_API,
+    supabaseKey: process.env.SUPABASE_KEY,
   },
 
   // konfigurasi loading component

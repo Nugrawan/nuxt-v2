@@ -1,24 +1,43 @@
 <template>
-  <div>
-    <h1 class="text-center text-red-800 font-bold text-5xl p-10">Hello Nuxt</h1>
-    <div class="p-5 mx-auto" >
-      <h3 class="text-center text-lg">{{ tasks[0].title }}</h3>
+  <main id="content">
+    <h1 class="text-5xl font-semibold text-white p-5 bg-gray">Our Products Categories</h1>
+    <div class="px-10 items-center text-secondary text-xl font-bold flex gap-10">
+      <button v-for="category in categories" :key="category" class="hover:bg-gray p-3" @click="selectProducts(category)">
+        {{ category }}
+      </button>
     </div>
-  </div>
+    <CardContainer title="">
+      <CardItem :is-clothes="false" :data="selectedProducts.length == 0 ? eletData : selectedProducts" />
+    </CardContainer>
+    <div class="bg-[url('/second.jpg')] bg-cover w-5/6 mx-auto p-10 h-96 m-10 rounded-md flex flex-col justify-center">
+      <div class="w-[40%] text-white">
+        <h2 class="text-4xl font-bold mb-3">Feel Free To Explore Anywhere!</h2>
+        <p class="text-sm mb-5">Introducing our luxurious and comfortable lingerie collection, designed to make you feel
+          confident and elegant every day. Our premium fabrics and exquisite designs ensure a perfect fit, whether you're
+          looking for sensual lace, everyday essentials, or something special. Elevate your inner beauty with our intimate
+          apparel.</p>
+        <div>
+          <ButtonComponents name="Find All Products" target="/products" />
+        </div>
+      </div>
+    </div>
+
+  </main>
 </template>
+
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
-  data() {
-    return {
-      // Daftar task
-      tasks: [
-        {
-          title: 'Task 1',
-          description: 'ini deskripsi',
-          isDone: false,
-        },
-      ],
-    }
+  layout: 'home',
+  computed: {
+    ...mapState(['selectedProducts', 'categories', 'eletData']),
   },
+  mounted() {
+    this.fetchCategories()
+    this.fetchElectronictsProducts()
+  },
+  methods: {
+    ...mapActions(['selectProducts', 'fetchCategories', 'fetchElectronictsProducts']),
+  }
 }
 </script>
